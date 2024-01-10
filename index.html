@@ -1,48 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <title>Todo List</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de vitimas</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
 
     <!-- Drop in the HTMX lib-->
     <script src="https://unpkg.com/htmx.org@1.9.6"></script>
-
-    <style>
-      li {
-        list-style-type: none !important;
-      }
-      input:checked + label {
-        text-decoration: line-through;
-      }
-    </style>
 </head>
 <body>
-    <div class="container" >
-      <br>
-      <!-- Sprinkle hx-boost="true" on all the things we want to be dynamic -->
-        <h1>Todo <span>({{counts['done']}}/{{counts['total']}})</span></h1>
-        <form action="/add" method="post" hx-boost="true" >
-          <input type="text" name="title" placeholder="New task"  value="" autocomplete="off" >
-          <button type="submit" value="Add" class="button-primary" role="button"  >Add</button>
+    <div class="container">
+        <br>
+        <h1>Lista de Vitimas<span>({{contagem['feito']}}/{{contagem['total']}})
+        </span></h1>
+        <form action="/adicionar"
+            method="post"
+            hx-boost="true"
+        > 
+            <input type="text" 
+                    name="nome" 
+                    placeholder="Nova vitima" 
+                    value="" 
+                    autocomplete="off" 
+                    required
+            >
+            <button type="submit" 
+                    value="Adicionar" 
+                    class="button-primary" 
+                    role="button"
+                    >Adicionar</button>
         </form>
-        <form action="/set_task_status" method="post" hx-boost="true" >
+        <form action="/set_status_lista" method="post" hx-boost="true" >
             <ul>
-                % for task in tasks:
-                <li >
-                    <input type="checkbox" id="task{{task['id']}}"
-                           name="task"
-                           value="{{task['id']}}"
-                           % if task['done']:
-                           checked
-                           % end
-                    >
-                    <label for="task{{task['id']}}">{{task['title']}}</label>
-                    <a href="/delete/{{task['id']}}" hx-boost="true"  >X</a>
-                </li>
-                % end
+                % for vitima in lista:
+                    <li>
+                        <input type="checkbox" id="vitima{{vitima['id']}}"     
+                                name="vitima"                        
+                                value="{{vitima['id']}}" 
+                                % if vitima['feito']:
+                                checked
+                                % end
+                        >
+                        <label for="vitima{{vitima['id']}}">{{vitima['nome']}}</label>
+                        <a href="/apagar/{{vitima['id']}}" hx-boost="true" >X</a>
+                    </li> % end
             </ul>
-            % if tasks:
-            <button type="submit" class="button-primary">Update</button>
+            % if lista:
+            <button type="submit" value="Feito" class="button-primary">Atualizar</button>
             % end
         </form>
     </div>

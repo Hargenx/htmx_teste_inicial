@@ -8,14 +8,14 @@ sys.path.append(str(DIR.parent))
 import lista
 from bottle import TEMPLATE_PATH, debug, redirect, request, route, run, template
 
-TEMPLATE_PATH.append(DIR)
+TEMPLATE_PATH.append(str(DIR))
 
 
 @route("/")
 def index():
     '''Pega as vitimas listadas.'''
     try:
-        vitima = lista.obter_todas_listas()
+        vitima = lista.obter_todas_vitimas()
         contagem = lista.contar_vitimas()
         return template("index", vitima=vitima, contagem=contagem)
     except:
@@ -27,7 +27,7 @@ def adicionar():
     try:
         nome = request.forms.get("nome")
         if nome:
-            lista.adicionar_vitima(nome)
+            lista.criar_lista(nome)
         redirect("/")
     except:
         return template("erro")
@@ -36,15 +36,11 @@ def adicionar():
 def set_status_lista():
     '''Altera o status de uma vitima.'''
     try:
-        vitima = lista.obter_todas_listas()
-        contagem = lista.contar_vitimas()
-        vitima_id = int(request.forms.get("vitima_id"))
-        status = request.forms.get("status")
-        if status == "true":
-            status = True
-        else:
-            status = False
-        lista.set_status_vitima(vitima_id, status)
+        todas_vitimas = lista.obter_todas_vitimas()
+        id_acoes_feitas = set(int(id) for id in request.forms.getall('lista'))
+        for vitima in todas_vitimas:
+            novo_status = vitima['id'] in id_acoes_feitas
+            lista.set_status_lista(lista['id'], novo_status)
         redirect("/")
     except:
         return template("erro")
@@ -55,11 +51,12 @@ def set_status_lista():
 def apagar(id):
     '''Apaga uma vitima da lista.'''
     try:
-        lista.apagar_vitima(id)
+        lista.apagar_lista(id)
         redirect("/")
     except:
         return template("erro")
-    
+
+
 if __name__ == "__main__":
     debug(True)
-    run(host="localhost", port=8080, reloader=True)
+    run(host="127.0.0.1", port=8080, reloader=True)

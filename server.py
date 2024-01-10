@@ -16,7 +16,7 @@ TEMPLATE_PATH.append(str(CUR_DIR))
 def index():
     tasks = todo.list_todos()
     counts = todo.count_todos()
-    return template("index", tasks=tasks, counts=counts)
+    return template("index_en", tasks=tasks, counts=counts)
 
 
 @route("/add", method="POST")
