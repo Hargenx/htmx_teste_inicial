@@ -3,52 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de vitimas</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <title>Lista de Nomes</title>
 
-    <!-- Drop in the HTMX lib-->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+
 </head>
-<body>
-    <div class="container">
+<body class="flex justify-center items-center h-screen">
+    <div class="container flex flex-col justify-center items-center h-screen">
         <br>
-        <h1>Lista de Vitimas<span>({{contagem['feito']}}/{{contagem['total']}})
+        <h1 class="text-4xl mb-4">Lista de Nomes<span class="text-lg">({{contagem['feito']}}/{{contagem['total']}})
         </span></h1>
         <form action="/adicionar"
             method="post"
             hx-boost="true"
         > 
             <input type="text" 
-                    name="nome" 
+                    name="nome"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     placeholder="Nova vitima" 
                     value="" 
                     autocomplete="off" 
-                    required
             >
             <button type="submit" 
                     value="Adicionar" 
-                    class="button-primary" 
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     role="button"
                     >Adicionar</button>
         </form>
-        <form action="/set_status_lista" method="post" hx-boost="true" >
-            <ul>
-                % for vitima in lista:
-                    <li>
-                        <input type="checkbox" id="vitima{{vitima['id']}}"     
-                                name="vitima"                        
-                                value="{{vitima['id']}}" 
-                                % if vitima['feito']:
-                                checked
-                                % end
-                        >
-                        <label for="vitima{{vitima['id']}}">{{vitima['nome']}}</label>
-                        <a href="/apagar/{{vitima['id']}}" hx-boost="true" >X</a>
-                    </li> % end
+        <form action="/set_status_lista" method="post" hx-boost="true" class="mt-4">
+            <ul class="space-y-4">
+                % for vitima in listas:
+                <li class="flex items-center">
+                    <input type="checkbox" id="vitima{{vitima['id']}}"     
+                        name="vitima"                        
+                        value="{{vitima['id']}}" 
+                        % if vitima['feito']:
+                        checked
+                        % end
+                        class="mr-2"
+                    >
+                    <label for="vitima{{vitima['id']}}" class="{{ 'line-through' if vitima['feito'] else '' }}">{{vitima['nome']}}</label>
+                    <a href="/apagar/{{vitima['id']}}" hx-boost="true" class="ml-2">X</a>
+                </li> 
+                % end
             </ul>
-            % if lista:
-            <button type="submit" value="Feito" class="button-primary">Atualizar</button>
+            % if listas:
+            <button type="submit" value="Feito" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Atualizar</button>
             % end
         </form>
     </div>

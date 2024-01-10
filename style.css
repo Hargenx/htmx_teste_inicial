@@ -1,7 +1,0 @@
-li {
-    list-style-type: none !important;
-}
-
-input:checked+label {
-    text-decoration: line-through;
-}
