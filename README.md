@@ -27,7 +27,6 @@ htmx_teste_inicial/
 ├── index.html
 └── README.md
 ├── requirement.txt
-└── ss-style.png
 ```
 
 
@@ -35,11 +34,10 @@ htmx_teste_inicial/
 - `lista.py`: Funções para o DB, lógica do negocio.
 - `index.htm`: index...
 - `rquirement.txt`: O que precisa para utilizar.
-- `ss-style.png`: imagem
 - `README.md`: Este arquivo.
 
 ## Como Executar
-
+![SS sendo usado](ss-style.png)
 ### Pré-requisitos
 
 - Python 3 instalado
